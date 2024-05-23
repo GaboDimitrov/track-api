@@ -65,7 +65,7 @@ To start the application using Docker, follow these steps:
 2. Make sure that the DATABASE_URL is set to `postgres://postgres:password@postgres:5432/trackdb`
 3. Run docker compose up --build
 
-Docker will run the production build, so no hot reload will be applied
+This will start PostgreSQL in a container and build the application. Please note that hot reload will not be applied during this process.
 
 ## Usage
 
