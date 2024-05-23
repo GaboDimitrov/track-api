@@ -6,6 +6,7 @@ describe("formatError", () => {
     message: "An error occurred",
     extensions: {
       code: "BAD_REQUEST",
+      statusCode: 400,
     },
     path: ["somePath"],
     locations: [{ line: 1, column: 1 }],
@@ -16,6 +17,7 @@ describe("formatError", () => {
 
     expect(formattedError).toHaveProperty("message", "An error occurred");
     expect(formattedError).toHaveProperty("code", "BAD_REQUEST");
+    expect(formattedError).toHaveProperty("statusCode", 400);
     expect(formattedError).toHaveProperty("path", ["somePath"]);
     expect(formattedError).toHaveProperty("timestamp");
     expect(new Date(formattedError.timestamp).toString()).not.toBe(

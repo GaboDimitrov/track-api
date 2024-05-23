@@ -1,5 +1,8 @@
 import { container } from "../container";
 
+jest.mock("sequelize");
+jest.mock("../../utils/validateEnv");
+
 describe("container", () => {
   test("should register sequelize as a value", () => {
     expect(container.resolve("sequelize")).toBeDefined();

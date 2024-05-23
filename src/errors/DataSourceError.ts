@@ -6,7 +6,7 @@ export class DataSourceError extends GraphQLError {
       extensions: {
         code: "DATA_SOURCE_ERROR",
         originalError: error,
-        http: { status: 500 },
+        statusCode: 500,
       },
     });
   }

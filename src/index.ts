@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { GraphQLContext, server } from "./server";
 import { sequelize } from "./config";
 import { startStandaloneServer } from "@apollo/server/standalone";

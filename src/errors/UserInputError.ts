@@ -5,7 +5,7 @@ export class UserInputError extends GraphQLError {
     super(message, {
       extensions: {
         code: "BAD_USER_INPUT",
-        http: { status: 400 },
+        statusCode: 400,
       },
     });
   }

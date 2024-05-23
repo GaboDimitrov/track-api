@@ -5,7 +5,7 @@ export class AuthenticationError extends GraphQLError {
     super(message, {
       extensions: {
         code: "UNAUTHENTICATED",
-        http: { status: 401 },
+        statusCode: 401,
       },
     });
   }

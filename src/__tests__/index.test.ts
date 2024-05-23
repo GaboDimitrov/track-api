@@ -1,7 +1,11 @@
-import { startServer } from "../";
+import { startServer } from "..";
 import { Sequelize } from "sequelize";
 import { AwilixContainer } from "awilix";
 import { AuthService } from "../services/authService/types";
+
+jest.mock("sequelize");
+jest.mock("@apollo/server/standalone");
+jest.mock("../utils/validateEnv");
 
 interface MockedSequelize extends Partial<Sequelize> {
   authenticate: jest.Mock;
@@ -36,6 +40,10 @@ describe("startServer", () => {
   const consoleErrorSpy = jest.spyOn(console, "error");
 
   afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  afterAll(() => {
     jest.resetAllMocks();
   });
 

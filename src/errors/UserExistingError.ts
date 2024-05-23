@@ -5,7 +5,7 @@ export class UserAlreadyExistsError extends GraphQLError {
     super("Registration error: User already exists", {
       extensions: {
         code: "REGISTRATION_ERROR",
-        http: { status: 409 },
+        statusCode: 409,
       },
     });
   }

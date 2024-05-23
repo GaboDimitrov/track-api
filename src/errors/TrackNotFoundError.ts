@@ -5,7 +5,7 @@ export class TrackNotFoundError extends GraphQLError {
     super(message, {
       extensions: {
         code: "TRACK_NOT_FOUND",
-        http: { status: 404 },
+        statusCode: 404,
       },
     });
   }
