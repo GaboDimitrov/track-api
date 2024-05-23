@@ -52,6 +52,7 @@ To get started with Track API, follow these steps:
    JWT_SECRET=your_jwt_secret
    ```
 5. Start the development server:
+
    ```bash
    npm run dev
    ```
@@ -61,7 +62,7 @@ To get started with Track API, follow these steps:
 To start the application using Docker, follow these steps:
 
 1. Ensure Docker is installed on your system.
-2. Make sure that the DATABASE_URL is set to `postgres://postgres:password@localhost:5433/trackdb`
+2. Make sure that the DATABASE_URL is set to `postgres://postgres:password@postgres:5432/trackdb`
 3. Run docker compose up --build
 
 Docker will run the production build, so no hot reload will be applied
