@@ -56,7 +56,7 @@ describe("authService", () => {
   });
 
   describe("register", () => {
-    test("if hashes password and create user", async () => {
+    test("hashes password and creates a user", async () => {
       const hashedPassword = "hashedpassword";
       const mockUser: UserAttributes = {
         id: 1,
@@ -78,7 +78,7 @@ describe("authService", () => {
       expect(result).toEqual(mockUser);
     });
 
-    test("if throws UserInputError when username is too short", async () => {
+    test("throws UserInputError when username is too short", async () => {
       validateMock.mockReturnValueOnce({
         error: { details: [{ message: "too short" }] },
       });
@@ -87,7 +87,7 @@ describe("authService", () => {
       );
     });
 
-    test("if throws UserInputError when password is too short", async () => {
+    test("throws UserInputError when password is too short", async () => {
       validateMock.mockReturnValueOnce({
         error: { details: [{ message: "too short" }] },
       });
@@ -96,7 +96,7 @@ describe("authService", () => {
       );
     });
 
-    test("if throws UserAlreadyExistsError when username exist", async () => {
+    test("throws UserAlreadyExistsError when username exist", async () => {
       const mockUser: UserAttributes = {
         id: 1,
         username: "testuser",
@@ -113,7 +113,7 @@ describe("authService", () => {
   });
 
   describe("login", () => {
-    test("if returns token if username and password are correct", async () => {
+    test("returns token if username and password are correct", async () => {
       const mockUser: UserAttributes = {
         id: 1,
         username: "testuser",
@@ -143,7 +143,7 @@ describe("authService", () => {
       expect(result).toEqual(mockToken);
     });
 
-    test("if throws an error when username is incorrect", async () => {
+    test("throws an error when username is incorrect", async () => {
       userRepositoryMock.findByUsername.mockResolvedValue(null);
 
       await expect(service.login("testuser", "password")).rejects.toThrow(
@@ -151,7 +151,7 @@ describe("authService", () => {
       );
     });
 
-    test("if throws an error when password is incorrect", async () => {
+    test("throws an error when password is incorrect", async () => {
       const mockUser: UserAttributes = {
         id: 1,
         username: "testuser",
@@ -169,7 +169,7 @@ describe("authService", () => {
   });
 
   describe("getUser", () => {
-    test("if returns user when the token is valid", async () => {
+    test("returns user when the token is valid", async () => {
       const mockUser: UserAttributes = {
         id: 1,
         username: "testuser",
@@ -191,7 +191,7 @@ describe("authService", () => {
       expect(result).toEqual({ id: mockUser.id, username: mockUser.username });
     });
 
-    test("it returns null when token is NOT valid", async () => {
+    test("returns null when token is NOT valid", async () => {
       jwtMock.verify.mockImplementation(() => {
         throw new Error("Invalid token");
       });
@@ -205,7 +205,7 @@ describe("authService", () => {
       expect(result).toBeNull();
     });
 
-    test("if returns null when user is NOT found", async () => {
+    test("returns null when user is NOT found", async () => {
       const mockDecoded = { id: 1, username: "testuser" };
       jwtMock.verify.mockReturnValue(mockDecoded);
       userRepositoryMock.findById.mockResolvedValue(null);

@@ -24,7 +24,7 @@ describe("trackDataSource", () => {
   });
 
   describe("getTrackByNameAndArtists", () => {
-    test("should return track data if API call is successful", async () => {
+    test("returns track data if API call is successful", async () => {
       const mockTrackRaw: TrackRaw = {
         name: "Test Track",
         artists: [{ name: "Artist1" }],
@@ -59,7 +59,7 @@ describe("trackDataSource", () => {
       expect(result).toEqual([mockTrackRaw]);
     });
 
-    test("should throw error if API call fails with error", async () => {
+    test("throws error if API call fails with error", async () => {
       const mockError = new Error("API call failed");
       axiosMock.get.mockRejectedValue(mockError);
 
@@ -86,7 +86,7 @@ describe("trackDataSource", () => {
       );
     });
 
-    test("should throw error if API call fails with other than error", async () => {
+    test("throws error if API call fails with other than error", async () => {
       const mockError = "ERROR";
       axiosMock.get.mockRejectedValue(mockError);
 

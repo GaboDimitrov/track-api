@@ -16,7 +16,7 @@ describe("userRepository", () => {
     jest.clearAllMocks();
   });
 
-  test("should find a user by username", async () => {
+  test("finds a user by username", async () => {
     const username = "testuser";
     const userAttributes: UserAttributes = {
       id: 1,
@@ -35,7 +35,7 @@ describe("userRepository", () => {
     expect(result).toEqual(userAttributes);
   });
 
-  test("should return null if user is not found by username", async () => {
+  test("returns null if user is not found by username", async () => {
     const username = "testuser";
     userMock.findOne.mockResolvedValue(null);
 
@@ -45,7 +45,7 @@ describe("userRepository", () => {
     expect(result).toBeNull();
   });
 
-  test("should find a user by ID", async () => {
+  test("finds a user by ID", async () => {
     const userId = 1;
     const userAttributes: UserAttributes = {
       id: 1,
@@ -64,7 +64,7 @@ describe("userRepository", () => {
     expect(result).toEqual(userAttributes);
   });
 
-  test("should return null if user is not found by ID", async () => {
+  test("returns null if user is not found by ID", async () => {
     const userId = 1;
     userMock.findByPk.mockResolvedValue(null);
 
@@ -74,7 +74,7 @@ describe("userRepository", () => {
     expect(result).toBeNull();
   });
 
-  test("should create a new user", async () => {
+  test("creates a new user", async () => {
     const userCreationAttributes: UserCreationAttributes = {
       username: "newuser",
       password: "newpassword",

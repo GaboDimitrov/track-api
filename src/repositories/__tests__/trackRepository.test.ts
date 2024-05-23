@@ -32,7 +32,7 @@ describe("trackRepository", () => {
   });
 
   describe("getTrackByNameAndArtists", () => {
-    test("it returns track when found by name and artist", async () => {
+    test("returns track when found by name and artist", async () => {
       trackMock.findAll.mockResolvedValue(mockTracks);
       const result = await repository.getTrackByNameAndArtists("Test Track", [
         "Artist1",
@@ -40,7 +40,7 @@ describe("trackRepository", () => {
       expect(trackMock.findAll).toHaveBeenCalled();
       expect(result).toEqual(mockTracks[0]);
     });
-    test("it returns the first track when found by name and partial artist name", async () => {
+    test("returns the first track when found by name and partial artist name", async () => {
       const mockTracks = [
         {
           id: 1,
@@ -71,7 +71,7 @@ describe("trackRepository", () => {
       expect(result?.artistNames).toEqual(["Artist2"]);
     });
 
-    test("should return null if no track found by name and artist", async () => {
+    test("returns null if no track found by name and artist", async () => {
       trackMock.findAll.mockResolvedValue([]);
       const result = await repository.getTrackByNameAndArtists("Test Track", [
         "Artist1",
@@ -81,7 +81,7 @@ describe("trackRepository", () => {
     });
   });
   describe("getAllTracks", () => {
-    test("should return all tracks", async () => {
+    test("returns all tracks", async () => {
       trackMock.findAll.mockResolvedValue(mockTracks);
       const result = await repository.getAllTracks();
       expect(trackMock.findAll).toHaveBeenCalled();
@@ -89,7 +89,7 @@ describe("trackRepository", () => {
     });
   });
   describe("getTrackById", () => {
-    test("should return track if found by id", async () => {
+    test("returns track if found by id", async () => {
       const date = new Date();
       const mockTrack = {
         get: () => ({
@@ -109,7 +109,7 @@ describe("trackRepository", () => {
       expect(trackMock.findByPk).toHaveBeenCalledWith(1);
       expect(result).toEqual(mockTrack.get());
     });
-    test("should return null if track not found by id", async () => {
+    test("returns null if track not found by id", async () => {
       trackMock.findByPk.mockResolvedValue(null);
       const result = await repository.getTrackById(1);
       expect(trackMock.findByPk).toHaveBeenCalledWith(1);
@@ -117,7 +117,7 @@ describe("trackRepository", () => {
     });
   });
   describe("updateTrack", () => {
-    test("should update and return track if found", async () => {
+    test("updates and return track if found", async () => {
       const mockTrack: TrackInstance = {
         get: jest.fn().mockReturnValue({
           id: 1,
@@ -145,7 +145,7 @@ describe("trackRepository", () => {
       expect(mockTrack.update).toHaveBeenCalledWith(updateData);
       expect(result).toEqual(mockTrack.get());
     });
-    test("should throw error if track not found", async () => {
+    test("throws error if track not found", async () => {
       trackMock.findByPk.mockResolvedValue(null);
       const updateData: TrackUpdateAttributes = {
         id: 1,
@@ -162,7 +162,7 @@ describe("trackRepository", () => {
     });
   });
   describe("createTrack", () => {
-    test("should create and return track", async () => {
+    test("creates and return track", async () => {
       const releaseDate = new Date();
       const mockTrack = {
         get: () => ({
@@ -188,13 +188,13 @@ describe("trackRepository", () => {
     });
   });
   describe("deleteTrackById", () => {
-    test("should return true if track is deleted", async () => {
+    test("returns true if track is deleted", async () => {
       trackMock.destroy.mockResolvedValue(1);
       const result = await repository.deleteTrackById(1);
       expect(trackMock.destroy).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(result).toBe(true);
     });
-    test("should return false if track is not found", async () => {
+    test("returns false if track is not found", async () => {
       trackMock.destroy.mockResolvedValue(0);
       const result = await repository.deleteTrackById(1);
       expect(trackMock.destroy).toHaveBeenCalledWith({ where: { id: 1 } });

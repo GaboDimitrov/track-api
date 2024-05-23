@@ -47,7 +47,7 @@ describe("startServer", () => {
     jest.resetAllMocks();
   });
 
-  it("should start the server successfully", async () => {
+  test("starts the server successfully", async () => {
     await startServer({
       sequelize: sequelizeMock,
       startStandaloneServer: startStandaloneServerMock,
@@ -62,14 +62,14 @@ describe("startServer", () => {
     );
   });
 
-  it("should handle errors when starting the server", async () => {
+  test("handles errors when starting the server", async () => {
     const error = new Error("Test Error");
     sequelizeMock.authenticate = jest.fn().mockRejectedValue(error);
 
     await startServer({
-      sequelize: sequelizeMock as Sequelize,
-      startStandaloneServer: startStandaloneServerMock as any,
-      container: containerMock as any,
+      sequelize: sequelizeMock,
+      startStandaloneServer: startStandaloneServerMock,
+      container: containerMock,
     });
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
@@ -78,7 +78,7 @@ describe("startServer", () => {
     );
   });
 
-  it("should set user in context if token is provided", async () => {
+  test("sets user in context if token is provided", async () => {
     const mockGetUser = jest
       .fn()
       .mockResolvedValue({ id: 1, name: "Test User" });
@@ -99,11 +99,11 @@ describe("startServer", () => {
     expect(context.user).toEqual({ id: 1, name: "Test User" });
   });
 
-  it("should not set user in context if no token is provided", async () => {
+  test("does not set user in context if no token is provided", async () => {
     await startServer({
       sequelize: sequelizeMock as Sequelize,
-      startStandaloneServer: startStandaloneServerMock as any,
-      container: containerMock as any,
+      startStandaloneServer: startStandaloneServerMock,
+      container: containerMock,
     });
 
     const contextFunction = startStandaloneServerMock.mock.calls[0][1].context;

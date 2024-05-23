@@ -142,7 +142,7 @@ describe("trackResolvers", () => {
           expect(result).toBe(resultData);
         });
 
-        test("should throw error if user is NOT authenticated", async () => {
+        test("throws error if user is NOT authenticated", async () => {
           const args = { name: "Test Track", artistNames: ["Artist1"] };
 
           trackServiceMock.getTrackByNameAndArtists.mockResolvedValue(track);
@@ -158,7 +158,7 @@ describe("trackResolvers", () => {
       });
 
       describe("getAllTracks", () => {
-        test("should return array of tracks", async () => {
+        test("returns array of tracks", async () => {
           const resultData = [track];
           trackServiceMock.getAllTracks.mockResolvedValue(resultData);
 
@@ -172,7 +172,7 @@ describe("trackResolvers", () => {
           expect(result).toBe(resultData);
         });
 
-        test("should return empty array if there are no tracks", async () => {
+        test("returns empty array if there are no tracks", async () => {
           const resultData = Array.from([]);
           trackServiceMock.getAllTracks.mockResolvedValue(resultData);
 
@@ -186,7 +186,7 @@ describe("trackResolvers", () => {
           expect(result).toBe(resultData);
         });
 
-        test("should throw error if user is NOT authenticated", async () => {
+        test("throws error if user is NOT authenticated", async () => {
           const resultData = Array.from([]);
           trackServiceMock.getAllTracks.mockResolvedValue(resultData);
 
@@ -201,7 +201,7 @@ describe("trackResolvers", () => {
       });
 
       describe("getTrackById", () => {
-        test("should return track by Id", async () => {
+        test("returns track by Id", async () => {
           const args = { id: 1 };
           const resultData = track;
           trackServiceMock.getTrackById.mockResolvedValue(resultData);
@@ -216,7 +216,7 @@ describe("trackResolvers", () => {
           expect(result).toBe(resultData);
         });
 
-        test("should throw error if track with provided Id is not found", async () => {
+        test("throws error if track with provided Id is not found", async () => {
           const args = { id: 1 };
           trackServiceMock.getTrackById.mockRejectedValue(
             new TrackNotFoundError("Track with id: 1 not found")
@@ -231,7 +231,7 @@ describe("trackResolvers", () => {
           ).rejects.toThrow(TrackNotFoundError);
         });
 
-        test("should throw error if user is NOT authenticated", async () => {
+        test("throws error if user is NOT authenticated", async () => {
           const args = { id: 1 };
           const resultData = null;
           trackServiceMock.getTrackById.mockResolvedValue(resultData);
@@ -251,7 +251,7 @@ describe("trackResolvers", () => {
       const user = { id: 1, username: "testuser" };
 
       describe("createTrack", () => {
-        test("should create new track", async () => {
+        test("creates new track", async () => {
           const trackData = {
             name: "New Track",
             artistNames: ["Artist1"],
@@ -273,7 +273,7 @@ describe("trackResolvers", () => {
           expect(result).toBe(resultData);
         });
 
-        test("should throw error if user is NOT authenticated", async () => {
+        test("throws error if user is NOT authenticated", async () => {
           const trackData = {
             name: "New Track",
             artistNames: ["Artist1"],
@@ -294,7 +294,7 @@ describe("trackResolvers", () => {
         });
       });
       describe("updateTrackById", () => {
-        test("should Update track if found by Id", async () => {
+        test("updates track if found by Id", async () => {
           const trackData = {
             id: 1,
             name: "Updated Track",
@@ -319,7 +319,7 @@ describe("trackResolvers", () => {
           expect(result).toBe(resultData);
         });
 
-        test("should throw error if track is NOT found by Id", async () => {
+        test("throws error if track is NOT found by Id", async () => {
           const trackData = {
             id: 1,
             name: "Updated Track",
@@ -341,7 +341,7 @@ describe("trackResolvers", () => {
           ).rejects.toThrow(TrackNotFoundError);
         });
 
-        test("should throw error if user is NOT authenticated", async () => {
+        test("throws error if user is NOT authenticated", async () => {
           const trackData = {
             id: 1,
             name: "Updated Track",
@@ -362,7 +362,7 @@ describe("trackResolvers", () => {
       });
 
       describe("deleteTrackById", () => {
-        test("should delete track if found by Id", async () => {
+        test("deletes track if found by Id", async () => {
           const args = { id: 1 };
           const resultData = true;
           trackServiceMock.deleteTrackById.mockResolvedValue(resultData);
@@ -383,7 +383,7 @@ describe("trackResolvers", () => {
           expect(result).toBe(resultData);
         });
 
-        test("should throw error if user is NOT authenticated", async () => {
+        test("throws error if user is NOT authenticated", async () => {
           const args = { id: 1 };
           const trackData = {
             id: 1,

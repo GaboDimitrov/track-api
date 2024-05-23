@@ -25,7 +25,7 @@ describe("userResolvers", () => {
 
   describe("Mutation", () => {
     describe("register", () => {
-      test("should register a user", async () => {
+      test("registers a user", async () => {
         const mockUser: UserAttributes = {
           id: 1,
           username: "testuser",
@@ -48,7 +48,7 @@ describe("userResolvers", () => {
       });
     });
     describe("login", () => {
-      test("should login a user and return a token", async () => {
+      test("logs in a user and returns a token", async () => {
         const mockToken = "mocked.jwt.token";
         authServiceMock.login.mockResolvedValue(mockToken);
         const result = await userResolvers.Mutation.login(

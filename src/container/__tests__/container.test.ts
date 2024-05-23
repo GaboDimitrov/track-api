@@ -4,51 +4,54 @@ jest.mock("sequelize");
 jest.mock("../../utils/validateEnv");
 
 describe("container", () => {
-  test("should register sequelize as a value", () => {
+  test("registers sequelize as a value", () => {
     expect(container.resolve("sequelize")).toBeDefined();
   });
 
-  test("should register format as a singleton function", () => {
+  test("registers format as a singleton function", () => {
     expect(container.resolve("format")).toBeDefined();
   });
 
-  test("should register axios as a singleton function", () => {
+  test("registers axios as a singleton function", () => {
     expect(container.resolve("axios")).toBeDefined();
   });
 
-  test("should register config as a value", () => {
+  test("registers config as a value", () => {
     expect(container.resolve("config")).toBeDefined();
   });
 
-  test("should register bcrypt as a singleton function", () => {
+  test("registers bcrypt as a singleton function", () => {
     expect(container.resolve("bcrypt")).toBeDefined();
   });
 
-  test("should register jwt as a singleton function", () => {
+  test("registers jwt as a singleton function", () => {
     expect(container.resolve("jwt")).toBeDefined();
   });
 
-  test("should register models as a value", () => {
+  test("registers models as a value", () => {
     expect(container.resolve("models")).toBeDefined();
   });
 
-  test("should register trackRepository as a singleton function", () => {
+  test("registers trackRepository as a singleton function", () => {
     expect(container.resolve("trackRepository")).toBeDefined();
   });
 
-  test("should register trackService as a singleton function", () => {
+  test("registers trackService as a singleton function", () => {
     expect(container.resolve("trackService")).toBeDefined();
   });
 
-  test("should register trackDataSource as a singleton function", () => {
+  test("registers trackDataSource as a singleton function", () => {
     expect(container.resolve("trackDataSource")).toBeDefined();
   });
 
-  test("should register authService as a singleton function", () => {
+  test("registers authService as a singleton function", () => {
     expect(container.resolve("authService")).toBeDefined();
   });
+  test("registers trackValidationSchema as value", () => {
+    expect(container.resolve("trackValidationSchema")).toBeDefined();
+  });
 
-  test("should register userRepository as a singleton function", () => {
+  test("registers userRepository as a singleton function", () => {
     expect(container.resolve("userRepository")).toBeDefined();
   });
 });
