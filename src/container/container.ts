@@ -11,6 +11,8 @@ import { config } from "../config/env";
 import { authService } from "../services/authService";
 import { userRepository } from "../repositories/userRepository";
 import { trackDataSource } from "../dataSource/trackDataSource";
+import { createTrack, register, updateTrack } from "../validation";
+import { getTrackByNameAndArtists } from "../validation/";
 
 const container: AwilixContainer = createContainer();
 
@@ -19,6 +21,14 @@ container.register({
   format: asFunction(() => format).singleton(),
   axios: asFunction(() => axios).singleton(),
   config: asValue(config),
+  trackValidationSchema: asValue({
+    createTrack,
+    getTrackByNameAndArtists,
+    updateTrack,
+  }),
+  authValidationSchema: asValue({
+    register,
+  }),
   bcrypt: asFunction(() => bcrypt).singleton(),
   jwt: asFunction(() => jwt).singleton(),
   models: asValue(initModels(sequelize)),

@@ -1,4 +1,4 @@
-import { ModelStatic } from "sequelize";
+import { ModelStatic, Op } from "sequelize";
 import {
   TrackAttributes,
   TrackCreationAttributes,
@@ -19,20 +19,28 @@ export const trackRepository = ({
     name: string,
     artistNames: string[]
   ): Promise<TrackAttributes | null> => {
-    // TODO: DB request can be improved
+    const namePattern = `%${name}%`;
+    const artistPatterns = artistNames.map((artist) => `%${artist}%`);
+
     const tracks = await Track.findAll({
-      where: { name },
+      where: {
+        name: {
+          [Op.iLike]: namePattern,
+        },
+      },
+      raw: true,
     });
 
-    const filteredTracks = tracks.filter((track) => {
-      return artistNames.some((artistName) =>
-        track.artistNames.some((trackArtistName) =>
-          new RegExp(artistName, "i").test(trackArtistName)
+    const filteredTracks = tracks.filter((track) =>
+      artistPatterns.some((pattern) =>
+        track.artistNames.some((artistName) =>
+          new RegExp(pattern.replace(/%/g, ".*"), "i").test(artistName)
         )
-      );
-    });
+      )
+    );
 
     const track = filteredTracks.length ? filteredTracks[0] : null;
+
     return track;
   };
 

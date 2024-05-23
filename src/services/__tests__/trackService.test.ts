@@ -1,5 +1,6 @@
+import { error } from "console";
 import { TrackDataSource } from "../../dataSource/trackDataSource";
-import { TrackNotFoundError } from "../../errors";
+import { TrackNotFoundError, UserInputError } from "../../errors";
 import {
   TrackAttributes,
   TrackCreationAttributes,
@@ -9,6 +10,12 @@ import {
   TrackRepository,
   trackRepository,
 } from "../../repositories/trackRepository";
+import {
+  CreateTrackSchema,
+  RegisterSchema,
+  UpdateTrackSchema,
+  getTrackByNameAndArtistsSchema,
+} from "../../validation";
 import { TrackRaw, trackService } from "../trackService";
 
 describe("trackService", () => {
@@ -21,6 +28,28 @@ describe("trackService", () => {
     deleteTrackById: jest.fn(),
   };
 
+  const getTrackByNameAndArtistsValidateMock = jest.fn();
+  const createTrackValidateMock = jest.fn();
+  const updateTrackValidateMock = jest.fn();
+
+  const getTrackByNameAndArtistsSchemaMock: getTrackByNameAndArtistsSchema = {
+    validate: getTrackByNameAndArtistsValidateMock,
+  };
+
+  const createTrackSchemaMock: CreateTrackSchema = {
+    validate: createTrackValidateMock,
+  };
+
+  const updateTrackSchemaMock: UpdateTrackSchema = {
+    validate: updateTrackValidateMock,
+  };
+
+  const trackValidationSchemaMock = {
+    createTrack: createTrackSchemaMock,
+    getTrackByNameAndArtists: getTrackByNameAndArtistsSchemaMock,
+    updateTrack: updateTrackSchemaMock,
+  };
+
   const trackDataSourceMock: jest.Mocked<TrackDataSource> = {
     getTrackByNameAndArtists: jest.fn(),
   };
@@ -28,9 +57,15 @@ describe("trackService", () => {
   const service = trackService({
     trackRepository: trackRepositoryMock,
     trackDataSource: trackDataSourceMock,
+    trackValidationSchema: trackValidationSchemaMock,
   });
 
   beforeEach(() => {
+    getTrackByNameAndArtistsValidateMock.mockReturnValue({ error: null });
+    updateTrackValidateMock.mockReturnValue({ error: null });
+    createTrackValidateMock.mockReturnValue({ error: null });
+  });
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
@@ -41,7 +76,7 @@ describe("trackService", () => {
         name: "Test Track",
         artistNames: ["Artist1"],
         duration: 300,
-        ISRC: "123456789",
+        isrc: "123456789",
         releaseDate: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -76,7 +111,7 @@ describe("trackService", () => {
         name: "Test Track",
         artistNames: ["Artist1"],
         duration: 300000,
-        ISRC: "123456789",
+        isrc: "123456789",
         releaseDate: new Date("2021-01-01"),
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -105,7 +140,7 @@ describe("trackService", () => {
         name: "Test Track",
         artistNames: ["Artist1"],
         duration: 300000,
-        ISRC: "123456789",
+        isrc: "123456789",
         releaseDate: new Date("2021-01-01"),
       });
       expect(result).toEqual(mockTrack);
@@ -128,6 +163,15 @@ describe("trackService", () => {
         ["Artist1"]
       );
     });
+
+    test("should throw error if user input is incorrect", async () => {
+      getTrackByNameAndArtistsValidateMock.mockReturnValue({
+        error: { details: [{ message: "too short" }] },
+      });
+      await expect(
+        service.getTrackByNameAndArtists("Test Track", ["Artist1"])
+      ).rejects.toThrow(UserInputError);
+    });
   });
 
   describe("getAllTracks", () => {
@@ -138,7 +182,7 @@ describe("trackService", () => {
           name: "Track 1",
           artistNames: ["Artist 1"],
           duration: 200,
-          ISRC: "123456789",
+          isrc: "123456789",
           releaseDate: new Date(),
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -160,7 +204,7 @@ describe("trackService", () => {
         name: "Updated Track",
         artistNames: ["Updated Artist"],
         duration: 400,
-        ISRC: "987654321",
+        isrc: "987654321",
         releaseDate: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -170,7 +214,7 @@ describe("trackService", () => {
         name: "Updated Track",
         artistNames: ["Updated Artist"],
         duration: 400,
-        ISRC: "987654321",
+        isrc: "987654321",
         releaseDate: new Date(),
       };
       trackRepositoryMock.updateTrack.mockResolvedValue(mockTrack);
@@ -187,7 +231,7 @@ describe("trackService", () => {
         name: "Updated Track",
         artistNames: ["Updated Artist"],
         duration: 400,
-        ISRC: "987654321",
+        isrc: "987654321",
         releaseDate: new Date(),
       };
       trackRepositoryMock.updateTrack.mockResolvedValue(null);
@@ -198,6 +242,15 @@ describe("trackService", () => {
 
       expect(trackRepositoryMock.updateTrack).toHaveBeenCalledWith(updateData);
     });
+
+    test("should throw error if user input is incorrect", async () => {
+      updateTrackValidateMock.mockReturnValue({
+        error: { details: [{ message: "too short" }] },
+      });
+      await expect(service.updateTrackById({ id: 1 })).rejects.toThrow(
+        UserInputError
+      );
+    });
   });
 
   describe("createTrack", () => {
@@ -207,7 +260,7 @@ describe("trackService", () => {
         name: "New Track",
         artistNames: ["New Artist"],
         duration: 250,
-        ISRC: "1122334455",
+        isrc: "1122334455",
         releaseDate: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -216,7 +269,7 @@ describe("trackService", () => {
         name: "New Track",
         artistNames: ["New Artist"],
         duration: 250,
-        ISRC: "1122334455",
+        isrc: "1122334455",
         releaseDate: new Date(),
       };
       trackRepositoryMock.createTrack.mockResolvedValue(mockTrack);
@@ -225,6 +278,22 @@ describe("trackService", () => {
 
       expect(trackRepositoryMock.createTrack).toHaveBeenCalledWith(createData);
       expect(result).toEqual(mockTrack);
+    });
+
+    test("should throw error if user input is incorrect", async () => {
+      const createData: TrackCreationAttributes = {
+        name: "New Track",
+        artistNames: ["New Artist"],
+        duration: 250,
+        isrc: "1122334455",
+        releaseDate: new Date(),
+      };
+      createTrackValidateMock.mockReturnValue({
+        error: { details: [{ message: "too short" }] },
+      });
+      await expect(service.createTrack(createData)).rejects.toThrow(
+        UserInputError
+      );
     });
   });
 
@@ -235,7 +304,7 @@ describe("trackService", () => {
         name: "Track 1",
         artistNames: ["Artist 1"],
         duration: 200,
-        ISRC: "123456789",
+        isrc: "123456789",
         releaseDate: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),

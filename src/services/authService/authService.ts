@@ -6,9 +6,10 @@ import { UserRepository } from "../../repositories/userRepository";
 import { Config } from "../../config";
 import {
   UserAlreadyExistsError,
-  ValidationError,
+  UserInputError,
   AuthenticationError,
 } from "../../errors";
+import { AuthValidationSchema } from "../../validation";
 
 export type Bcrypt = Pick<typeof bcrypt, "hash" | "compare">;
 export type JWT = Pick<typeof jwt, "sign" | "verify">;
@@ -18,22 +19,25 @@ export const authService = ({
   config,
   bcrypt,
   jwt,
+  authValidationSchema,
 }: {
   userRepository: UserRepository;
   config: Config;
   bcrypt: Bcrypt;
   jwt: JWT;
+  authValidationSchema: AuthValidationSchema;
 }): AuthService => {
   const register = async (
     username: string,
     password: string
   ): Promise<UserAttributes> => {
-    if (username.length < 4) {
-      throw new ValidationError("Username must be at least 4 characters");
-    }
+    const { error } = authValidationSchema.register.validate({
+      username,
+      password,
+    });
 
-    if (password.length < 4) {
-      throw new ValidationError("Password must be at least 4 characters");
+    if (error) {
+      throw new UserInputError(error.details[0].message);
     }
 
     const existingUser = await userRepository.findByUsername(username);

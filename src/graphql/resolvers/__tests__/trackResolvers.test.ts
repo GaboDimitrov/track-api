@@ -39,7 +39,7 @@ describe("trackResolvers", () => {
       name: "Test Track",
       artistNames: ["Artist1", "Artist2"],
       duration: 300,
-      ISRC: "ISRC123",
+      isrc: "isrc123",
       releaseDate: new Date(),
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -256,7 +256,7 @@ describe("trackResolvers", () => {
             name: "New Track",
             artistNames: ["Artist1"],
             duration: 200,
-            ISRC: "ISRC1234",
+            isrc: "isrc1234",
             releaseDate: new Date(),
           };
           const resultData = track;
@@ -278,7 +278,7 @@ describe("trackResolvers", () => {
             name: "New Track",
             artistNames: ["Artist1"],
             duration: 200,
-            ISRC: "ISRC1234",
+            isrc: "isrc1234",
             releaseDate: new Date(),
           };
           const resultData = track;
@@ -300,7 +300,7 @@ describe("trackResolvers", () => {
             name: "Updated Track",
             artistNames: ["Artist1"],
             duration: 210,
-            ISRC: "ISRC1234",
+            isrc: "isrc1234",
             releaseDate: new Date(),
           };
           const resultData = track;
@@ -325,7 +325,7 @@ describe("trackResolvers", () => {
             name: "Updated Track",
             artistNames: ["Artist1"],
             duration: 210,
-            ISRC: "ISRC1234",
+            isrc: "isrc1234",
             releaseDate: new Date(),
           };
           trackServiceMock.updateTrackById.mockRejectedValue(
@@ -347,7 +347,7 @@ describe("trackResolvers", () => {
             name: "Updated Track",
             artistNames: ["Artist1"],
             duration: 210,
-            ISRC: "ISRC1234",
+            isrc: "isrc1234",
             releaseDate: new Date(),
           };
 
@@ -390,7 +390,7 @@ describe("trackResolvers", () => {
             name: "Updated Track",
             artistNames: ["Artist1"],
             duration: 210,
-            ISRC: "ISRC1234",
+            isrc: "isrc1234",
             releaseDate: new Date(),
           };
           trackServiceMock.updateTrackById.mockRejectedValue(trackData);

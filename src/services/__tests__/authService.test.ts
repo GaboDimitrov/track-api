@@ -3,8 +3,12 @@ import { UserRepository } from "../../repositories/userRepository";
 import { Config } from "../../config";
 import { UserAttributes, UserLoginAttributes } from "../../models/User";
 import { AuthService } from "../authService/types";
-import { AuthenticationError, UserAlreadyExistsError } from "../../errors";
-import { ValidationError } from "sequelize";
+import {
+  AuthenticationError,
+  UserAlreadyExistsError,
+  UserInputError,
+} from "../../errors";
+import { AuthValidationSchema, RegisterSchema } from "../../validation";
 
 describe("authService", () => {
   const userRepositoryMock: jest.Mocked<UserRepository> = {
@@ -26,11 +30,25 @@ describe("authService", () => {
     sign: jest.fn(),
     verify: jest.fn(),
   };
+
+  const validateMock = jest.fn();
+  const registerSchemaMock: RegisterSchema = {
+    validate: validateMock,
+  };
+
+  const authValidationSchemaMock: AuthValidationSchema = {
+    register: registerSchemaMock,
+  };
   const service: AuthService = authService({
     userRepository: userRepositoryMock,
     config: configMock,
     bcrypt: bcryptMock,
     jwt: jwtMock,
+    authValidationSchema: authValidationSchemaMock,
+  });
+
+  beforeEach(() => {
+    validateMock.mockReturnValue({ error: null });
   });
 
   afterEach(() => {
@@ -60,15 +78,21 @@ describe("authService", () => {
       expect(result).toEqual(mockUser);
     });
 
-    test("if throws ValidationError when username is too short", async () => {
+    test("if throws UserInputError when username is too short", async () => {
+      validateMock.mockReturnValueOnce({
+        error: { details: [{ message: "too short" }] },
+      });
       await expect(service.register("tes", "password")).rejects.toThrow(
-        "Username must be at least 4 characters"
+        UserInputError
       );
     });
 
-    test("if throws ValidationError when password is too short", async () => {
+    test("if throws UserInputError when password is too short", async () => {
+      validateMock.mockReturnValueOnce({
+        error: { details: [{ message: "too short" }] },
+      });
       await expect(service.register("testuser", "pas")).rejects.toThrow(
-        "Password must be at least 4 characters"
+        UserInputError
       );
     });
 

@@ -4,21 +4,34 @@ import {
   TrackUpdateAttributes,
 } from "../../models/init";
 import { TrackRepository } from "../../repositories/trackRepository";
-import { TrackNotFoundError } from "../../errors";
+import { TrackNotFoundError, UserInputError } from "../../errors";
 import { TrackService } from "./types";
 import { TrackDataSource } from "../../dataSource/trackDataSource";
+import Joi from "joi";
+import { TrackValidationSchema } from "../../validation/types";
 
 export const trackService = ({
   trackRepository,
   trackDataSource,
+  trackValidationSchema,
 }: {
   trackRepository: TrackRepository;
   trackDataSource: TrackDataSource;
+  trackValidationSchema: TrackValidationSchema;
 }): TrackService => {
   const getTrackByNameAndArtists = async (
     name: string,
     artistNames: string[]
   ): Promise<TrackAttributes | null> => {
+    const { error } = trackValidationSchema.getTrackByNameAndArtists.validate({
+      name,
+      artistNames,
+    });
+
+    if (error) {
+      throw new UserInputError(error.details[0].message);
+    }
+
     let track = await trackRepository.getTrackByNameAndArtists(
       name,
       artistNames
@@ -36,7 +49,7 @@ export const trackService = ({
           name: trackData.name,
           artistNames: trackData.artists.map((artist) => artist.name),
           duration: trackData.duration_ms,
-          ISRC: trackData.isrc,
+          isrc: trackData.isrc,
           releaseDate: new Date(trackData.album.release_date),
         });
       }
@@ -60,6 +73,12 @@ export const trackService = ({
   const updateTrackById = async (
     trackData: TrackUpdateAttributes
   ): Promise<TrackAttributes | null> => {
+    const { error } = trackValidationSchema.updateTrack.validate(trackData);
+
+    if (error) {
+      throw new UserInputError(error.details[0].message);
+    }
+
     const track = await trackRepository.updateTrack(trackData);
 
     if (!track) {
@@ -72,6 +91,12 @@ export const trackService = ({
   const createTrack = async (
     trackData: TrackCreationAttributes
   ): Promise<TrackAttributes> => {
+    const { error } = trackValidationSchema.createTrack.validate(trackData);
+
+    if (error) {
+      throw new UserInputError(error.details[0].message);
+    }
+
     return await trackRepository.createTrack(trackData);
   };
 

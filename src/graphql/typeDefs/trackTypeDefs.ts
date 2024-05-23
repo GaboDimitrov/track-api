@@ -6,7 +6,7 @@ export const trackTypeDefs = gql`
     name: String!
     artist_name: String!
     duration: String!
-    ISRC: String!
+    isrc: String!
     releaseDate: String!
     createdAt: String!
     updatedAt: String!
@@ -27,7 +27,7 @@ export const trackTypeDefs = gql`
       name: String!
       artistNames: [String!]!
       duration: Int!
-      ISRC: String!
+      isrc: String!
       releaseDate: String!
     ): Track!
     updateTrackById(
@@ -35,7 +35,7 @@ export const trackTypeDefs = gql`
       name: String
       artistNames: [String]
       duration: Int
-      ISRC: String
+      isrc: String
       releaseDate: String
     ): Track
     deleteTrackById(id: ID!): Boolean!

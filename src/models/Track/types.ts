@@ -5,7 +5,7 @@ export interface TrackAttributes {
   name: string;
   artistNames: string[];
   duration: number;
-  ISRC: string;
+  isrc: string;
   releaseDate: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -16,7 +16,7 @@ export interface FormattedTrackAttributes {
   name: string;
   artistNames: string[];
   duration: number;
-  ISRC: string;
+  isrc: string;
   releaseDate: string;
   createdAt: string;
   updatedAt: string;
@@ -33,7 +33,7 @@ export interface TrackUpdateAttributes
     | "name"
     | "artistNames"
     | "duration"
-    | "ISRC"
+    | "isrc"
     | "releaseDate"
   > {}
 

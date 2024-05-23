@@ -21,7 +21,7 @@ export const TrackModel = (sequelize: Sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    ISRC: {
+    isrc: {
       type: DataTypes.STRING,
       allowNull: false,
     },
